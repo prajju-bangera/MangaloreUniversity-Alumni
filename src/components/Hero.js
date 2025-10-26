@@ -126,7 +126,7 @@ const Hero = () => {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
 
     if (statsRef.current) {
@@ -164,7 +164,7 @@ const Hero = () => {
     <section className="hero" id="home">
       {/* Background Image */}
       <div className="hero-background">
-        <div className="image-overlay"></div>
+        <div className="image-overlay1"></div>
         <img 
           src="https://upload.wikimedia.org/wikipedia/commons/2/29/Entrance_of_Mangalore_University_in_Konaje.jpg" 
           alt="Mangalore University Entrance"
@@ -191,14 +191,12 @@ const Hero = () => {
           {/* Quick Links */}
           <div className="quick-links">
             <button className="quick-link-btn primary" onClick={handleJoinNow}>
-              {/* <span className="quick-link-icon"></span> */}
               Join Now
             </button>
             <button 
               className={`quick-link-btn secondary ${showEvents ? 'active' : ''}`}
               onClick={handleViewEvents}
             >
-              {/* <span className="quick-link-icon">📅</span> */}
               {showEvents ? 'Hide Events' : 'Upcoming Events'}
             </button>
           </div>

@@ -33,10 +33,9 @@ const Navbar = () => {
       name: 'News & Events', 
       href: '#news',
       dropdown: [
-        { name: 'Upcoming Alumni Meets & Webinars', href: '#upcoming-events' },
-        { name: 'Annual Reunion / Homecoming', href: '#reunion' },
-        { name: 'Alumni Spotlights / Achievements', href: '#alumni-spotlights' },
-        { name: 'Career or Life Stories from Alumni', href: '#career-stories' }
+        { name: 'News', href: '#news' },
+        { name: 'Events', href: '#events' }
+    
       ]
     },
     { name: 'Gallery', href: '#gallery' },

@@ -31,6 +31,7 @@
   opacity: 0.9;
   max-width: 600px;
   margin: 0 auto;
+  line-height:60px;
 }
 
 /* Main Contact Section */
@@ -430,7 +431,9 @@
   }
   
   .hero-content p {
-    font-size: 1.1rem;
+    font-size: 0.8rem;
+    line-height: 50px;
+
   }
   
   .container {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './AboutUs.css';
 
 const AboutUs = () => {
-  const [activeMessage, setActiveMessage] = useState('chancellor');
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [visibleSections, setVisibleSections] = useState({});
   
   const sectionRefs = {
@@ -13,23 +13,36 @@ const AboutUs = () => {
     cta: useRef(null)
   };
 
-  const messages = {
-    chancellor: {
-      title: "Message from Chancellor",
+  const leadershipMessages = [
+    {
+      id: 'chancellor',
+      title: "Chancellor",
       name: "Dr. S. R. Niranjan",
+      photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
       content: "It gives me immense pleasure to witness the remarkable journey of Mangalore University and its alumni community. Our alumni are our greatest ambassadors, carrying forward the legacy of excellence and values instilled during their time at the university."
     },
-    viceChancellor: {
-      title: "Message from Vice-Chancellor",
+    {
+      id: 'viceChancellor',
+      title: "Vice-Chancellor",
       name: "Dr. P. S. Yadapadithaya",
+      photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
       content: "Mangalore University takes great pride in its alumni who have excelled in various fields across the globe. The Alumni Association plays a crucial role in fostering lifelong connections and contributing to the university's growth."
     },
-    president: {
-      title: "Message from Alumni President",
+    {
+      id: 'president',
+      title: "Alumni President",
       name: "Mr. Rajesh Kumar",
+      photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
       content: "As alumni, we carry the torch of Mangalore University's rich tradition wherever we go. Our association is committed to creating meaningful engagements and supporting the university's development initiatives."
+    },
+    {
+      id: 'secretary',
+      title: "Alumni Secretary",
+      name: "Ms. Priya Sharma",
+      photo: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+      content: "The Alumni Association is dedicated to strengthening the bond between the university and its graduates. Through various programs and initiatives, we aim to create a vibrant community that supports professional growth and social responsibility."
     }
-  };
+  ];
 
   const objectives = [
     "Build strong relationships among alumni and the university",
@@ -38,6 +51,20 @@ const AboutUs = () => {
     "Support university development through fundraising",
     "Celebrate alumni achievements and success stories"
   ];
+
+  // Auto-slide effect for leadership messages
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % leadershipMessages.length);
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(slideInterval);
+  }, [leadershipMessages.length]);
+
+  // Manual slide navigation
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
 
   // Scroll animation observer
   useEffect(() => {
@@ -78,8 +105,19 @@ const AboutUs = () => {
         className={`about-hero ${visibleSections.hero ? 'visible' : ''}`}
       >
         <div className="about-content">
-            <h1>About Us</h1>
-          
+          <div className="title-container">
+            <h1 className="main-title">
+              About Us
+              <div className="underline-container">
+                <div className="underline-gradient"></div>
+                <div className="underline-dots">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+              </div>
+            </h1>
+          </div>
         </div>
       </section>
 
@@ -94,7 +132,7 @@ const AboutUs = () => {
             <div className="left-content">
               {/* University History */}
               <div className="history-content">
-                <h2 className="section-title">University History in Brief</h2>
+                <h2 className="section-title">Our History</h2>
                 <div className="history-text">
                   <p className="fade-in-item">
                     Mangalore University was established on September 10, 1980, to cater to the 
@@ -170,7 +208,7 @@ const AboutUs = () => {
       </section>
 
       {/* Alumni Association Objectives */}
-      <section 
+      {/* <section 
         ref={sectionRefs.objectives} 
         className={`objectives-section ${visibleSections.objectives ? 'visible' : ''}`}
       >
@@ -207,64 +245,83 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Messages Section */}
+      {/* Leadership Messages Section - Full Width */}
       <section 
         ref={sectionRefs.messages} 
         className={`messages-section ${visibleSections.messages ? 'visible' : ''}`}
       >
-        <div className="container">
-          <h2 className="section-title">Leadership Messages</h2>
-          <div className="messages-content">
-            <div className="message-tabs">
-              <button 
-                className={`tab-button ${activeMessage === 'chancellor' ? 'active' : ''}`}
-                onClick={() => setActiveMessage('chancellor')}
+        <div className="full-width-container">
+          <h2 className="section-title"> Messages From</h2>
+          <div className="leadership-slider-full">
+            <div className="slider-container-full">
+              <div 
+                className="slider-track-full"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                Chancellor
-              </button>
-              <button 
-                className={`tab-button ${activeMessage === 'viceChancellor' ? 'active' : ''}`}
-                onClick={() => setActiveMessage('viceChancellor')}
-              >
-                Vice-Chancellor
-              </button>
-              <button 
-                className={`tab-button ${activeMessage === 'president' ? 'active' : ''}`}
-                onClick={() => setActiveMessage('president')}
-              >
-                Alumni President
-              </button>
+                {leadershipMessages.map((leader, index) => (
+                  <div key={leader.id} className="slide-full">
+                    <div className="leader-card-full">
+                      <div className="leader-content-full">
+                        <div className="leader-info">
+                          <div className="leader-photo-container-full">
+                            <img 
+                              src={leader.photo} 
+                              alt={leader.name}
+                              className="leader-photo-full"
+                            />
+                            <div className="photo-overlay-full"></div>
+                          </div>
+                          <div className="leader-details">
+                            <h3 className="leader-title-full">{leader.title}</h3>
+                            <h4 className="leader-name-full">{leader.name}</h4>
+                          </div>
+                        </div>
+                        <div className="leader-message-full">
+                          <p>{leader.content}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             
-            <div className="message-display">
-              <div className="message-card fade-in-item">
-                <h3>{messages[activeMessage].title}</h3>
-                <h4>{messages[activeMessage].name}</h4>
-                <p>{messages[activeMessage].content}</p>
-              </div>
+            {/* Slider Navigation Dots */}
+            <div className="slider-nav-full">
+              {leadershipMessages.map((_, index) => (
+                <button
+                  key={index}
+                  className={`nav-dot-full ${index === currentSlide ? 'active' : ''}`}
+                  onClick={() => goToSlide(index)}
+                >
+                  <span></span>
+                </button>
+              ))}
+            </div>
+
+            {/* Manual Navigation Buttons */}
+            <div className="slider-controls-full">
+              <button 
+                className="slider-btn-full prev"
+                onClick={() => goToSlide((currentSlide - 1 + leadershipMessages.length) % leadershipMessages.length)}
+              >
+                ‹
+              </button>
+              <button 
+                className="slider-btn-full next"
+                onClick={() => goToSlide((currentSlide + 1) % leadershipMessages.length)}
+              >
+                ›
+              </button>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section 
-        ref={sectionRefs.cta} 
-        className={`cta-section ${visibleSections.cta ? 'visible' : ''}`}
-      >
-        <div className="container">
-          <div className="cta-content">
-            <h2 className="slide-up-item">Join Our Alumni Community</h2>
-            <p className="slide-up-item">Be part of our growing network and stay connected with your alma mater</p>
-            <div className="cta-buttons">
-              <button className="btn-primary pulse-item">Register Now</button>
-              <button className="btn-secondary pulse-item">Learn More</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 };

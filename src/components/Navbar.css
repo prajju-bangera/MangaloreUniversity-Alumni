@@ -54,6 +54,7 @@
   justify-content: space-between;
   position: relative;
   z-index: 2;
+  height: 70px;
 }
 
 /* Left Side - Logo & Icons */
@@ -224,7 +225,7 @@
   text-decoration: none;
   color: rgba(255, 255, 255, 0.9);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   padding: 0.6rem 1rem;
   border-radius: 12px;
   display: flex;
