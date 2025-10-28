@@ -33,7 +33,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="contact-us">
+    <div className="contact-us" id="contact-page">
       {/* Hero Section */}
       <section className="contact-hero">
           <h1>Contact Us</h1>

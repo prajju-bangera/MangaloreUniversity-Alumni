@@ -57,12 +57,120 @@
   width: 100%;
 }
 
+/* Category Dropdown for Mobile */
 .events-categories {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 20px;
+}
+
+.category-dropdown {
+  display: none;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 20px auto;
+  position: relative;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-header:hover {
+  border-color: #1a56db;
+  box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+}
+
+.dropdown-header.active {
+  border-color: #1a56db;
+  box-shadow: 0 4px 12px rgba(26, 86, 219, 0.2);
+}
+
+.dropdown-title {
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-header.active .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  margin-top: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.dropdown-options.show {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.dropdown-option {
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.dropdown-option:last-child {
+  border-bottom: none;
+}
+
+.dropdown-option:hover {
+  background: linear-gradient(135deg, #1a56db, #7e22ce);
+  color: white;
+}
+
+.dropdown-option.active {
+  background: linear-gradient(135deg, #1a56db, #7e22ce);
+  color: white;
+  font-weight: 600;
+}
+
+.category-icon {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
 }
 
 .category-filter-btn {
@@ -111,7 +219,7 @@
   box-shadow: 0 4px 15px rgba(126, 34, 206, 0.4);
 }
 
-/* Events Grid - 2 cards per row */
+/* Events Grid - Responsive cards */
 .events-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -430,12 +538,12 @@
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .events-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 25px;
   }
   
   .event-card {
-    max-width: 600px;
+    max-width: 100%;
   }
 }
 
@@ -448,13 +556,30 @@
     font-size: 2.2rem;
   }
   
-  .events-categories {
-    gap: 10px;
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   
-  .category-filter-btn {
-    padding: 10px 18px;
-    font-size: 0.8rem;
+  .events-categories {
+    display: none;
+  }
+  
+  .category-dropdown {
+    display: block;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .event-content {
+    padding: 0;
+  }
+  
+  .event-title {
+    font-size: 1.3rem;
+    padding-right: 80px;
   }
   
   .pagination-container {
@@ -472,10 +597,6 @@
     text-align: center;
   }
   
-  .event-title {
-    padding-right: 80px;
-  }
-  
   .event-date-badge {
     padding: 12px;
     min-width: 70px;
@@ -486,9 +607,13 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .events-main-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
   
   .events-subtitle {
@@ -500,18 +625,59 @@
     min-height: 380px;
   }
   
+  .category-dropdown {
+    max-width: 100%;
+  }
+  
+  .dropdown-header {
+    padding: 12px 16px;
+  }
+  
+  .dropdown-option {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .events-page {
+    padding: 30px 12px;
+  }
+  
+  .events-header {
+    margin-bottom: 40px;
+  }
+  
+  .events-main-title {
+    font-size: 1.8rem;
+  }
+  
+  .events-grid {
+    gap: 15px;
+  }
+  
+  .event-card {
+    padding: 15px;
+    min-height: 350px;
+  }
+  
   .event-actions {
     flex-direction: column;
   }
   
   .event-title {
     padding-right: 0;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
   
   .event-date-badge {
     position: static;
     margin-bottom: 15px;
     width: fit-content;
+  }
+  
+  .pagination-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
   }
 }

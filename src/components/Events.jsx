@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Events.css';
 
 const Events = () => {
@@ -6,6 +6,7 @@ const Events = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
   const [animateCards, setAnimateCards] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const eventsData = [
     {
@@ -83,11 +84,11 @@ const Events = () => {
   ];
 
   const categories = [
-    { id: 'all', name: 'All Events' },
-    { id: 'academic', name: 'ACADEMIC' },
-    { id: 'arts', name: 'ARTS' },
-    { id: 'sports', name: 'SPORTS' },
-    { id: 'community', name: 'COMMUNITY' }
+    { id: 'all', name: 'All Events', icon: '📅' },
+    { id: 'academic', name: 'ACADEMIC', icon: '📚' },
+    { id: 'arts', name: 'ARTS', icon: '🎨' },
+    { id: 'sports', name: 'SPORTS', icon: '⚽' },
+    { id: 'community', name: 'COMMUNITY', icon: '👥' }
   ];
 
   const filteredEvents = activeCategory === 'all' 
@@ -122,11 +123,48 @@ const Events = () => {
       setActiveCategory(categoryId);
       setCurrentPage(1);
       setAnimateCards(false);
+      setDropdownOpen(false);
     }, 500);
   };
 
+  // Get current active category name
+  const getActiveCategoryName = () => {
+    const category = categories.find(cat => cat.id === activeCategory);
+    return category ? category.name : 'All Events';
+  };
+
+  // Get current active category icon
+  const getActiveCategoryIcon = () => {
+    const category = categories.find(cat => cat.id === activeCategory);
+    return category ? category.icon : '📅';
+  };
+
+  // Toggle dropdown
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.category-dropdown')) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  // Reset to page 1 when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory]);
+
   return (
-    <div className="events-page">
+    <div className="events-page" id='events-page'>
       <div className="events-header">
         <div className="header-content">
           <h1 className="events-main-title">
@@ -140,6 +178,33 @@ const Events = () => {
       </div>
 
       <div className="events-container">
+        {/* Category Dropdown for Mobile */}
+        <div className="category-dropdown">
+          <div 
+            className={`dropdown-header ${dropdownOpen ? 'active' : ''}`}
+            onClick={toggleDropdown}
+          >
+            <div className="dropdown-title">
+              <span className="category-icon">{getActiveCategoryIcon()}</span>
+              {getActiveCategoryName()}
+            </div>
+            <span className="dropdown-icon">▼</span>
+          </div>
+          <div className={`dropdown-options ${dropdownOpen ? 'show' : ''}`}>
+            {categories.map(category => (
+              <div
+                key={category.id}
+                className={`dropdown-option ${activeCategory === category.id ? 'active' : ''}`}
+                onClick={() => handleCategoryChange(category.id)}
+              >
+                <span className="category-icon">{category.icon}</span>
+                {category.name}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Category Buttons for Desktop */}
         <div className="events-categories">
           {categories.map(category => (
             <button
@@ -183,12 +248,11 @@ const Events = () => {
                   </div>
 
                   <div className="event-actions">
-                   
                     <button 
                       className="register-btn"
                       onClick={() => handleRegister(event.title)}
                     >
-                      Register Now
+                      <span>Register Now</span>
                     </button>
                   </div>
                 </div>

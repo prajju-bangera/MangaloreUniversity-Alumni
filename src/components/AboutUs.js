@@ -98,7 +98,7 @@ const AboutUs = () => {
   }, []);
 
   return (
-    <div className="about-us">
+    <div className="about-us" id='university-history'>
       {/* Hero Section */}
       <section 
         ref={sectionRefs.hero} 
@@ -135,16 +135,11 @@ const AboutUs = () => {
                 <h2 className="section-title">Our History</h2>
                 <div className="history-text">
                   <p className="fade-in-item">
-                    Mangalore University was established on September 10, 1980, to cater to the 
-                    higher educational needs of the Dakshina Kannada, Udupi, and Kodagu districts. 
-                    Since its inception, the university has been committed to academic excellence, 
-                    research innovation, and community service.
+                   The Mangala Alumni Association is a dedicated network for all post-graduates and researchers, fostering lifelong connections and championing the continued success of our alma mater. Our mission is to strengthen the bond between alumni and the institution 
+                    through networking, events, and community-building initiatives.
                   </p>
                   <p className="fade-in-item">
-                    The university received its first accreditation from the National Assessment 
-                    and Accreditation Council (NAAC) in 1994 with a Four-Star status, and was 
-                    subsequently re-accredited with 'A' Grade in 2015, recognizing its commitment 
-                    to quality education and research.
+                  We believe that every graduate has a unique story, and together, these stories form the incredible narrative of MangaloreUniversity. This network is where you can find old friends, discover new opportunities, and give back to the community that helped shape you. We provide a platform for alumni to reconnect with former classmates, engage in valuable mentorship opportunities, and contribute to the vibrant future of MangaloreUniversity. So welcome home. Please do join us and stay connected with the global Mangalagangothri family.
                   </p>
                 </div>
 
@@ -190,7 +185,7 @@ const AboutUs = () => {
                   <div className="card-icon">🎯</div>
                   <div className="card-content">
                     <h4>Our Mission</h4>
-                    <p>Strengthen the bond between university and alumni through meaningful engagement and mutual support</p>
+                    <p>To foster lifelong relationships, mentorship, and collaboration among alumni while supporting the university’s development and community impact.</p>
                   </div>
                 </div>
                 
@@ -198,7 +193,7 @@ const AboutUs = () => {
                   <div className="card-icon">🌟</div>
                   <div className="card-content">
                     <h4>Our Vision</h4>
-                    <p>Create a dynamic global alumni community that actively contributes to university advancement</p>
+                    <p>To build a strong global alumni network that connects, inspires, and contributes to the continued growth of Mangalore University.</p>
                   </div>
                 </div>
               </div>

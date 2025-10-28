@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './News.css';
 
-const News = () => {
+
+const News = ({ id }) => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6); // Show 6 items per page
+  const [itemsPerPage] = useState(6);
   const [animateCards, setAnimateCards] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   // Sample news data with actual image URLs
   const newsItems = [
@@ -85,25 +90,41 @@ const News = () => {
     }
   ];
 
+  // Category labels with icons
+  const categories = [
+    { id: 'all', name: 'All News', icon: '📰' },
+    { id: 'alumni-spotlights', name: 'Alumni Spotlights', icon: '🌟' },
+    { id: 'university-news', name: 'University News', icon: '🏛️' },
+    { id: 'career-stories', name: 'Career Stories', icon: '💼' },
+    { id: 'newsletters', name: 'Newsletters', icon: '📋' }
+  ];
+
+    const handleReadMore = (newsId) => {
+    navigate(`/news/${newsId}`);
+  };
+
   // Filter news based on active category
   const filteredNews = activeCategory === 'all' 
     ? newsItems 
     : newsItems.filter(item => item.category === activeCategory);
-
-  // Category labels
-  const categories = [
-    { id: 'all', name: 'All News' },
-    { id: 'alumni-spotlights', name: 'Alumni Spotlights' },
-    { id: 'university-news', name: 'University News' },
-    { id: 'career-stories', name: 'Career Stories' },
-    { id: 'newsletters', name: 'Newsletters' }
-  ];
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredNews.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
+
+  // Get current active category name
+  const getActiveCategoryName = () => {
+    const category = categories.find(cat => cat.id === activeCategory);
+    return category ? category.name : 'All News';
+  };
+
+  // Get current active category icon
+  const getActiveCategoryIcon = () => {
+    const category = categories.find(cat => cat.id === activeCategory);
+    return category ? category.icon : '📰';
+  };
 
   // Handle category change with throw animation
   const handleCategoryChange = (categoryId) => {
@@ -112,14 +133,33 @@ const News = () => {
       setActiveCategory(categoryId);
       setCurrentPage(1);
       setAnimateCards(false);
+      setDropdownOpen(false);
     }, 500);
   };
 
-  // Handle page change - REMOVED automatic scroll
+  // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    // Removed window.scrollTo to prevent scrolling to top
   };
+
+  // Toggle dropdown
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.category-dropdown')) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   // Reset to page 1 when category changes
   useEffect(() => {
@@ -127,104 +167,136 @@ const News = () => {
   }, [activeCategory]);
 
   return (
-    <div className="news-page" id="news-section">
-      <div className="news-header">
-        <div className="title-container">
-          <h1 className="news-main-title">
-            News & Stories
-            <div className="news-title-underline"></div>
-          </h1>
-        </div>
-        <p className="news-subtitle">
-          Stay updated with the latest news, alumni achievements, and inspiring stories from our community.
-        </p>
-      </div>
-
-      <div className="news-container">
-        <div className="news-categories">
-          {categories.map(category => (
-            <button
-              key={category.id}
-              className={`category-btn ${activeCategory === category.id ? 'active' : ''}`}
-              onClick={() => handleCategoryChange(category.id)}
-            >
-              {category.name}
-            </button>
-          ))}
+    <section id={id} className="news-section">
+      <div className="news-page">
+        <div className="news-header">
+          <div className="title-container">
+            <h1 className="news-main-title">
+              News & Stories
+              <div className="news-title-underline"></div>
+            </h1>
+          </div>
+          <p className="news-subtitle">
+            Stay updated with the latest news, alumni achievements, and inspiring stories from our community.
+          </p>
         </div>
 
-        <div className={`news-grid ${animateCards ? 'throw-out' : 'throw-in'}`}>
-          {currentItems.map((item, index) => (
+        <div className="news-container">
+          {/* Category Dropdown for Mobile */}
+          <div className="category-dropdown">
             <div 
-              key={item.id} 
-              className="news-card"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className={`dropdown-header ${dropdownOpen ? 'active' : ''}`}
+              onClick={toggleDropdown}
             >
-              <div className="news-image">
-                <img src={item.image} alt={item.title} />
-                <div className="news-category-tag">{categories.find(cat => cat.id === item.category)?.name}</div>
-                <div className="image-overlay"></div>
+              <div className="dropdown-title">
+                <span className="category-icon">{getActiveCategoryIcon()}</span>
+                {getActiveCategoryName()}
               </div>
-              <div className="news-content">
-                <div className="news-meta">
-                  <span className="news-date">{item.date}</span>
-                  <span className="news-author">/ {item.author}</span>
+              <span className="dropdown-icon">▼</span>
+            </div>
+            <div className={`dropdown-options ${dropdownOpen ? 'show' : ''}`}>
+              {categories.map(category => (
+                <div
+                  key={category.id}
+                  className={`dropdown-option ${activeCategory === category.id ? 'active' : ''}`}
+                  onClick={() => handleCategoryChange(category.id)}
+                >
+                  <span className="category-icon">{category.icon}</span>
+                  {category.name}
                 </div>
-                <h3 className="news-headline">{item.title}</h3>
-                <p className="news-excerpt">{item.excerpt}</p>
-                <div className="news-action">
+              ))}
+            </div>
+          </div>
+
+          {/* Category Buttons for Desktop */}
+          <div className="news-categories">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                className={`category-btn ${activeCategory === category.id ? 'active' : ''}`}
+                onClick={() => handleCategoryChange(category.id)}
+              >
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className={`news-grid ${animateCards ? 'throw-out' : 'throw-in'}`}>
+            {currentItems.map((item, index) => (
+              <div 
+                key={item.id} 
+                className="news-card"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="news-image">
+                  <img src={item.image} alt={item.title} />
+                  <div className="news-category-tag">{categories.find(cat => cat.id === item.category)?.name}</div>
+                  <div className="image-overlay"></div>
+                </div>
+                <div className="news-content">
+                  <div className="news-meta">
+                    <span className="news-date">{item.date}</span>
+                    <span className="news-author">/ {item.author}</span>
+                  </div>
+                  <h3 className="news-headline">{item.title}</h3>
+                  <p className="news-excerpt">{item.excerpt}</p>
+                  <div className="news-action">
                   {item.category === 'newsletters' ? (
                     <a href={item.pdfLink} className="read-more-btn" download>
                       Download PDF <span className="arrow">↓</span>
                     </a>
                   ) : (
-                    <button className="read-more-btn">
+                    <button 
+                      className="read-more-btn"
+                      onClick={() => handleReadMore(item.id)}
+                    >
                       Read More <span className="arrow">→</span>
                     </button>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Pagination */}
-        {filteredNews.length > itemsPerPage && (
-          <div className="pagination-container">
-            <div className="pagination-info">
-              Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredNews.length)} of {filteredNews.length} items
-            </div>
-            <div className="pagination">
-              <button 
-                className="pagination-btn" 
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                &lt;
-              </button>
-              
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                <button
-                  key={page}
-                  className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
-                  onClick={() => handlePageChange(page)}
-                >
-                  {page}
-                </button>
-              ))}
-              
-              <button 
-                className="pagination-btn" 
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                &gt;
-              </button>
-            </div>
+            ))}
           </div>
-        )}
+
+          {/* Pagination */}
+          {filteredNews.length > itemsPerPage && (
+            <div className="pagination-container">
+              <div className="pagination-info">
+                Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredNews.length)} of {filteredNews.length} items
+              </div>
+              <div className="pagination">
+                <button 
+                  className="pagination-btn" 
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  &lt;
+                </button>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+                    onClick={() => handlePageChange(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+                
+                <button 
+                  className="pagination-btn" 
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
