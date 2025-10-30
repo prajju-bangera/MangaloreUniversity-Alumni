@@ -7,6 +7,7 @@ const Events = () => {
   const [itemsPerPage] = useState(4);
   const [animateCards, setAnimateCards] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userInterests, setUserInterests] = useState({});
 
   const eventsData = [
     {
@@ -101,8 +102,20 @@ const Events = () => {
   const currentItems = filteredEvents.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
 
-  const handleRegister = (eventTitle) => {
-    alert(`Thank you for registering for: ${eventTitle}`);
+  const handleInterest = (eventId, isInterested) => {
+    setUserInterests(prev => ({
+      ...prev,
+      [eventId]: isInterested
+    }));
+    
+    const event = eventsData.find(e => e.id === eventId);
+    if (event) {
+      if (isInterested) {
+        alert(`Great! You're interested in "${event.title}". We'll keep you updated about this event.`);
+      } else {
+        alert(`Noted. You're not interested in "${event.title}".`);
+      }
+    }
   };
 
   const formatDate = (dateString) => {
@@ -163,6 +176,11 @@ const Events = () => {
     setCurrentPage(1);
   }, [activeCategory]);
 
+  // Get button state for an event
+  const getButtonState = (eventId) => {
+    return userInterests[eventId];
+  };
+
   return (
     <div className="events-page" id='events-page'>
       <div className="events-header">
@@ -220,6 +238,8 @@ const Events = () => {
         <div className={`events-grid ${animateCards ? 'shuffle-out' : 'shuffle-in'}`}>
           {currentItems.map((event, index) => {
             const { month, day, year } = formatDate(event.date);
+            const userInterest = getButtonState(event.id);
+            
             return (
               <div 
                 key={event.id} 
@@ -248,12 +268,34 @@ const Events = () => {
                   </div>
 
                   <div className="event-actions">
-                    <button 
-                      className="register-btn"
-                      onClick={() => handleRegister(event.title)}
-                    >
-                      <span>Register Now</span>
-                    </button>
+                    <div className="interest-buttons">
+                      <button 
+                        className={`interest-btn interested-btn ${userInterest === true ? 'active' : ''}`}
+                        onClick={() => handleInterest(event.id, true)}
+                      >
+                        <span className="btn-icon">👍</span>
+                        <span className="btn-text">
+                          {userInterest === true ? 'Interested' : 'Interested'}
+                        </span>
+                      </button>
+                      
+                      <button 
+                        className={`interest-btn not-interested-btn ${userInterest === false ? 'active' : ''}`}
+                        onClick={() => handleInterest(event.id, false)}
+                      >
+                        <span className="btn-icon">👎</span>
+                        <span className="btn-text">
+                          {userInterest === false ? 'Not Interested' : 'Not Interested'}
+                        </span>
+                      </button>
+                    </div>
+                    
+                    {/* Status indicator */}
+                    {/* {userInterest !== undefined && (
+                      <div className={`interest-status ${userInterest ? 'interested' : 'not-interested'}`}>
+                        {userInterest ? '✓ You marked as interested' : '✗ You marked as not interested'}
+                      </div>
+                    )} */}
                   </div>
                 </div>
               </div>

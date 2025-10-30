@@ -54,8 +54,8 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  to="/about" 
-                  onClick={() => handleNavigation('/about')}
+                  to="#university-history" 
+                  onClick={() => handleNavigation('#university-history')}
                 >
                   About Us
                 </Link>

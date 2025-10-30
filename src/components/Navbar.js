@@ -183,11 +183,8 @@ const Navbar = () => {
   return (
     <>
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-        {/* Animated Background Overlay */}
-        <div className="nav-background-overlay"></div>
-        
         <div className="nav-container">
-          {/* Logo with Enhanced Animation */}
+          {/* Logo */}
           <div 
             className="nav-logo" 
             onClick={handleLogoClick}
@@ -195,7 +192,6 @@ const Navbar = () => {
           >
             <div className="logo-container">
               <img src={Logo} alt="Mangalore University Logo" className="logo-image" />
-              <div className="logo-glow"></div>
             </div>
             <div className="logo-text-container">
               <span className="logo-text">Mangalore University</span>
@@ -203,7 +199,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Desktop Links - Premium Design */}
+          {/* Desktop Navigation */}
           <div className="nav-links-right">
             {navItems.map((item, index) => (
               <div 
@@ -227,10 +223,10 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {/* Animated Hover Line */}
+                {/* Hover Line */}
                 <div className="nav-link-underline"></div>
 
-                {/* Premium Dropdown */}
+                {/* Dropdown Menu */}
                 {item.dropdown && (
                   <div className={`dropdown-menu ${activeDropdown === index ? 'active' : ''}`}>
                     <div className="dropdown-arrow-top"></div>
@@ -252,7 +248,7 @@ const Navbar = () => {
               </div>
             ))}
 
-            {/* Auth Button - Shows Login when not logged in, Profile when logged in */}
+            {/* Auth Button */}
             {user ? (
               <ProfileDropdown />
             ) : (
@@ -263,7 +259,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Enhanced Mobile Menu Toggle */}
+          {/* Mobile Menu Toggle */}
           <button 
             className={`mobile-menu-btn ${isMobileMenuOpen ? 'active' : ''}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -276,7 +272,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Premium Mobile Menu */}
+        {/* Mobile Menu */}
         <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
           <div className="mobile-menu-backdrop" onClick={() => setIsMobileMenuOpen(false)}></div>
           <div className="mobile-menu-content">

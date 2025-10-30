@@ -681,3 +681,131 @@
     font-size: 0.9rem;
   }
 }
+/* Interest Buttons Styles */
+.interest-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.interest-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.interest-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.interested-btn {
+  background: #f0f9ff;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+.interested-btn:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+
+.interested-btn.active {
+  background: #0369a1;
+  color: white;
+  border-color: #0369a1;
+}
+
+.not-interested-btn {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.not-interested-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.not-interested-btn.active {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+}
+
+.btn-text {
+  white-space: nowrap;
+}
+
+/* Interest Status */
+.interest-status {
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.interest-status.interested {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.interest-status.not-interested {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Responsive Design for Interest Buttons */
+@media (max-width: 768px) {
+  .interest-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .interest-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .btn-text {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .interest-buttons {
+    gap: 0.4rem;
+  }
+  
+  .interest-btn {
+    padding: 0.5rem 0.6rem;
+  }
+  
+  .btn-icon {
+    font-size: 1rem;
+  }
+}

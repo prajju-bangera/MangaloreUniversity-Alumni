@@ -309,6 +309,7 @@
   padding: 40px 0;
   overflow: hidden;
   display: block;
+  margin-top: -85px;
 }
 
 .horizontal-gallery-scroll {

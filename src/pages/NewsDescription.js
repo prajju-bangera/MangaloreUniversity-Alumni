@@ -187,15 +187,6 @@ const NewsDescription = () => {
               </div>
 
               {/* Social Share */}
-              <div className="social-share">
-                <h4>Share this article</h4>
-                <div className="share-buttons">
-                  <button className="share-btn twitter">Twitter</button>
-                  <button className="share-btn linkedin">LinkedIn</button>
-                  <button className="share-btn facebook">Facebook</button>
-                  <button className="share-btn copy">Copy Link</button>
-                </div>
-              </div>
             </div>
 
             {/* Sidebar */}
@@ -240,7 +231,7 @@ const NewsDescription = () => {
         </article>
 
         {/* Newsletter Subscription */}
-        <section className="newsletter-section">
+        {/* <section className="newsletter-section">
           <div className="newsletter-content">
             <h3>Stay Updated</h3>
             <p>Get the latest news and updates from Mangalore University delivered to your inbox.</p>
@@ -253,7 +244,7 @@ const NewsDescription = () => {
               <button className="newsletter-btn">Subscribe</button>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );

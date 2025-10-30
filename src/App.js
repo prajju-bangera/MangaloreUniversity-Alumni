@@ -15,6 +15,8 @@ import OrganizationStructure from './pages/OrganizationStructure';
 import AlumniObjectives from './pages/AlumniObjectives';
 import NewsDescription from './pages/NewsDescription';
 import Profile from './pages/Profile';
+import NotableAlumni from './pages/NotableAlumni';
+import AlumniNetwork from './pages/AlumniNetwork';
 
 // Smooth scroll function
 const smoothScrollTo = (element, duration = 800) => {
@@ -167,6 +169,9 @@ function App() {
             <Route path="/organization-structure" element={<OrganizationStructure />} />
             <Route path="/alumni-objectives" element={<AlumniObjectives />} />
             <Route path="/news/:id" element={<NewsDescription />} />
+            <Route path="/notable-alumni" element={<NotableAlumni />} />
+            <Route path="/alumni-network" element={<AlumniNetwork />} />
+
 
             {/* Protected Routes - Require Authentication */}
             <Route path="/profile" element={
