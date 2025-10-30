@@ -603,7 +603,7 @@
 
 /* View More Button Effect */
 .gallery-item::after {
-  content: 'View Details';
+  /* content: 'View Details'; */
   position: absolute;
   top: 50%;
   left: 50%;

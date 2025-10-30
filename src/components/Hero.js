@@ -36,6 +36,7 @@ const Hero = () => {
     name: '',
     email: '',
     whatsapp: '',
+    whatsappPrivacy: 'private', // 'private' or 'public'
     passoutYear: '',
     currentAddress: '',
     degree: '',
@@ -219,6 +220,14 @@ const Hero = () => {
     }
   };
 
+  // Handle privacy toggle
+  const handlePrivacyToggle = () => {
+    setMembershipForm(prev => ({
+      ...prev,
+      whatsappPrivacy: prev.whatsappPrivacy === 'private' ? 'public' : 'private'
+    }));
+  };
+
   const validateForm = () => {
     const errors = {};
     
@@ -264,6 +273,7 @@ const Hero = () => {
         name: '',
         email: '',
         whatsapp: '',
+        whatsappPrivacy: 'private',
         passoutYear: '',
         currentAddress: '',
         degree: '',
@@ -459,16 +469,34 @@ const Hero = () => {
                       <label htmlFor="whatsapp" className="alumni-form-label">
                         WhatsApp Number *
                       </label>
-                      <input
-                        type="tel"
-                        id="whatsapp"
-                        name="whatsapp"
-                        value={membershipForm.whatsapp}
-                        onChange={handleFormChange}
-                        className={`alumni-form-input ${formErrors.whatsapp ? 'error' : ''}`}
-                        placeholder="9876543210"
-                      />
+                      <div className="whatsapp-input-with-toggle">
+                        <input
+                          type="tel"
+                          id="whatsapp"
+                          name="whatsapp"
+                          value={membershipForm.whatsapp}
+                          onChange={handleFormChange}
+                          className={`alumni-form-input whatsapp-input ${formErrors.whatsapp ? 'error' : ''}`}
+                          placeholder="9876543210"
+                        />
+                        <div className="privacy-toggle-inside">
+                          <button
+                            type="button"
+                            className={`privacy-toggle-btn ${membershipForm.whatsappPrivacy === 'public' ? 'public' : 'private'}`}
+                            onClick={handlePrivacyToggle}
+                            title={membershipForm.whatsappPrivacy === 'private' ? 'Private - Click to make public' : 'Public - Click to make private'}
+                          >
+                            {membershipForm.whatsappPrivacy === 'private' ? '🔒' : '🌐'}
+                          </button>
+                        </div>
+                      </div>
                       {formErrors.whatsapp && <span className="alumni-form-error">{formErrors.whatsapp}</span>}
+                      <div className="privacy-explanation">
+                        {membershipForm.whatsappPrivacy === 'private' ? 
+                          '🔒 Your number will not be visible to other alumni' : 
+                          '🌐 Your number will be visible to other alumni members'
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>

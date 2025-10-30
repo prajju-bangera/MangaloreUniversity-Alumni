@@ -1604,3 +1604,96 @@
     width: 100%;
   }
 }
+/* Add these styles to your Hero.css */
+
+.whatsapp-input-with-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.whatsapp-input {
+  padding-right: 50px !important; /* Make space for the toggle button */
+}
+
+.privacy-toggle-inside {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.privacy-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.privacy-toggle-btn.private {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #6c757d;
+}
+
+.privacy-toggle-btn.public {
+  background: #e7f4e4;
+  border: 1px solid #28a745;
+  color: #28a745;
+}
+
+.privacy-toggle-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.privacy-toggle-btn.private:hover {
+  background: #e9ecef;
+}
+
+.privacy-toggle-btn.public:hover {
+  background: #d4edda;
+}
+
+.privacy-explanation {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 5px;
+  padding: 5px 0;
+  font-style: italic;
+}
+
+/* Focus state for the input with toggle */
+.whatsapp-input-with-toggle:focus-within .privacy-toggle-btn {
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .privacy-toggle-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .whatsapp-input {
+    padding-right: 45px !important;
+  }
+}
+
+/* Error state for the input with toggle */
+.whatsapp-input-with-toggle .whatsapp-input.error {
+  border-color: #dc3545;
+  padding-right: 50px;
+}
+
+.whatsapp-input-with-toggle .whatsapp-input.error + .privacy-toggle-inside .privacy-toggle-btn {
+  border-color: #dc3545;
+}

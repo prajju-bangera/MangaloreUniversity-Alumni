@@ -12,11 +12,12 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileDropdown, setMobileDropdown] = useState(null);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -165,6 +166,34 @@ const Navbar = () => {
     } else {
       handleNavClick(item);
     }
+  };
+
+  const handleProfileToggle = () => {
+    setShowProfileDropdown(!showProfileDropdown);
+  };
+
+  const handleProfileAction = (action) => {
+    switch (action) {
+      case 'profile':
+        navigate('/profile');
+        break;
+      case 'connections':
+        navigate('/connections');
+        break;
+      case 'events':
+        navigate('/events');
+        break;
+      case 'settings':
+        navigate('/settings');
+        break;
+      case 'logout':
+        logout();
+        break;
+      default:
+        break;
+    }
+    setIsMobileMenuOpen(false);
+    setShowProfileDropdown(false);
   };
 
   const handleAuthClick = () => {
@@ -328,21 +357,80 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
-            </div>
 
-            <div className="mobile-auth">
-              {user ? (
-                <div className="mobile-profile">
-                  <div className="mobile-profile-avatar">
-                    {user.avatar}
+              {/* Profile Section - Placed right after Contact Us */}
+              {user && (
+                <div className="mobile-profile-section">
+                  <div 
+                    className="mobile-profile-header"
+                    onClick={handleProfileToggle}
+                  >
+                    <div className="mobile-profile-summary">
+                      <div className="mobile-profile-avatar">
+                        {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                      </div>
+                      <div className="mobile-profile-info">
+                        <div className="mobile-profile-name">{user.name}</div>
+                        <div className="mobile-profile-email">{user.email}</div>
+                      </div>
+                      <span className={`mobile-profile-arrow ${showProfileDropdown ? 'active' : ''}`}>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
                   </div>
-                  <span className="mobile-profile-name">{user.name}</span>
+
+                  {/* Profile Dropdown */}
+                  <div className={`mobile-profile-dropdown ${showProfileDropdown ? 'active' : ''}`}>
+                    <div 
+                      className="mobile-profile-dropdown-item"
+                      onClick={() => handleProfileAction('profile')}
+                    >
+                      <div className="mobile-profile-dropdown-icon">👤</div>
+                      <span>View Profile</span>
+                    </div>
+                    <div 
+                      className="mobile-profile-dropdown-item"
+                      onClick={() => handleProfileAction('connections')}
+                    >
+                      <div className="mobile-profile-dropdown-icon">🔗</div>
+                      <span>My Connections</span>
+                    </div>
+                    <div 
+                      className="mobile-profile-dropdown-item"
+                      onClick={() => handleProfileAction('events')}
+                    >
+                      <div className="mobile-profile-dropdown-icon">📅</div>
+                      <span>My Events</span>
+                    </div>
+                    <div 
+                      className="mobile-profile-dropdown-item"
+                      onClick={() => handleProfileAction('settings')}
+                    >
+                      <div className="mobile-profile-dropdown-icon">⚙️</div>
+                      <span>Settings</span>
+                    </div>
+                    <div className="mobile-profile-dropdown-divider"></div>
+                    <div 
+                      className="mobile-profile-dropdown-item logout"
+                      onClick={() => handleProfileAction('logout')}
+                    >
+                      <div className="mobile-profile-dropdown-icon">🚪</div>
+                      <span>Logout</span>
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                <button className="btn-login-mobile" onClick={handleAuthClick}>
-                  <span>LOGIN</span>
-                  <div className="btn-mobile-effect"></div>
-                </button>
+              )}
+
+              {/* Login Button - Only show if user is not logged in */}
+              {!user && (
+                <div className="mobile-login-section">
+                  <button className="btn-login-mobile-full" onClick={handleAuthClick}>
+                    <span className="btn-login-text">LOGIN TO YOUR ACCOUNT</span>
+                    <div className="btn-login-effect"></div>
+                  </button>
+                </div>
               )}
             </div>
           </div>

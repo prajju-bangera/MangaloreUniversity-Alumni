@@ -8,88 +8,112 @@ const sampleAlumni = [
   {
     id: 1,
     name: 'Dr. Rajesh Kumar',
+    usn: '4MU95CS001',
     batch: '1995',
-    department: 'Computer Science',
     location: 'Bangalore, India',
-    currentRole: 'CTO at TechCorp',
     skills: ['AI/ML', 'Leadership', 'Startups'],
     chapter: 'Bangalore',
     isMentor: true,
     expertise: 'Technology & Entrepreneurship',
-    image: '/api/placeholder/300/300',
+    email: 'rajesh.kumar@email.com',
+    phone: '9876543210',
+    phoneVisibility: 'public',
+    address: '123 Tech Park, Koramangala, Bangalore - 560034, Karnataka, India',
+    degree: 'B.E. Computer Science',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
     linkedin: '#',
     twitter: '#'
   },
   {
     id: 2,
     name: 'Prof. Anjali Sharma',
+    usn: '4MU88PH002',
     batch: '1988',
-    department: 'Physics',
     location: 'Boston, USA',
-    currentRole: 'Professor at MIT',
     skills: ['Research', 'Quantum Physics', 'Mentoring'],
     chapter: 'Abroad',
     isMentor: true,
     expertise: 'Academic Research & Career Guidance',
-    image: '/api/placeholder/300/300',
+    email: 'anjali.sharma@mit.edu',
+    phone: '9123456789',
+    phoneVisibility: 'private',
+    address: '456 University Avenue, Boston, Massachusetts 02139, United States of America',
+    degree: 'M.Sc. Physics',
+    image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face',
     linkedin: '#',
     twitter: '#'
   },
   {
     id: 3,
     name: 'Mr. Vikram Patel',
+    usn: '4MU05BA003',
     batch: '2005',
-    department: 'Business Administration',
     location: 'Mumbai, India',
-    currentRole: 'CEO at GreenEnergy Solutions',
     skills: ['Business Strategy', 'Sustainability', 'Funding'],
     chapter: 'Mumbai',
     isMentor: false,
-    image: '/api/placeholder/300/300',
+    email: 'vikram.patel@greenenergy.com',
+    phone: '9988776655',
+    phoneVisibility: 'public',
+    address: '789 Business Tower, Bandra Kurla Complex, Mumbai - 400051, Maharashtra, India',
+    degree: 'MBA',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
     linkedin: '#',
     twitter: '#'
   },
   {
     id: 4,
     name: 'Dr. Priya Nair',
+    usn: '4MU98MD004',
     batch: '1998',
-    department: 'Medicine',
     location: 'Delhi, India',
-    currentRole: 'Director at National Health Institute',
     skills: ['Healthcare', 'Research', 'Public Policy'],
     chapter: 'Mangalore',
     isMentor: true,
     expertise: 'Healthcare & Medical Research',
-    image: '/api/placeholder/300/300',
+    email: 'priya.nair@nhi.gov.in',
+    phone: '9876512345',
+    phoneVisibility: 'private',
+    address: '321 Medical Complex, Saket, New Delhi - 110017, India',
+    degree: 'MBBS, MD',
+    image: 'https://images.unsplash.com/photo-1551836026-d5c88ac5d69a?w=300&h=300&fit=crop&crop=face',
     linkedin: '#',
     twitter: '#'
   },
   {
     id: 5,
     name: 'Ms. Meera Krishnan',
+    usn: '4MU10FA005',
     batch: '2010',
-    department: 'Fine Arts',
     location: 'London, UK',
-    currentRole: 'International Artist',
     skills: ['Contemporary Art', 'Exhibition', 'Creative Direction'],
     chapter: 'Abroad',
     isMentor: false,
-    image: '/api/placeholder/300/300',
+    email: 'meera.krishnan@artist.com',
+    phone: '9123487654',
+    phoneVisibility: 'public',
+    address: '567 Art Studio, Kensington, London SW7 2AZ, United Kingdom',
+    degree: 'BFA Fine Arts',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face',
     linkedin: '#',
     twitter: '#'
   },
   {
     id: 6,
     name: 'Dr. Arjun Menon',
+    usn: '4MU00CH006',
     batch: '2000',
-    department: 'Chemistry',
     location: 'Bangalore, India',
-    currentRole: 'Research Director at Global Pharma',
     skills: ['Drug Discovery', 'R&D', 'Team Leadership'],
     chapter: 'Bangalore',
     isMentor: true,
     expertise: 'Pharmaceutical Research & Development',
-    image: '/api/placeholder/300/300',
+    email: 'arjun.menon@globalpharma.com',
+    phone: '9876598765',
+    phoneVisibility: 'private',
+    address: '654 Research Park, Whitefield, Bangalore - 560066, Karnataka, India',
+    degree: 'M.Sc. Chemistry, PhD',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face',
     linkedin: '#',
     twitter: '#'
   }
@@ -145,10 +169,13 @@ const AlumniNetwork = () => {
   const [filteredAlumni, setFilteredAlumni] = useState([]);
   const [mentors, setMentors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [connectedUsers, setConnectedUsers] = useState(new Set());
+  const [expandedAddresses, setExpandedAddresses] = useState(new Set());
+  const [selectedAlumni, setSelectedAlumni] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
   const [filters, setFilters] = useState({
     search: '',
     batch: 'all',
-    department: 'all',
     chapter: 'all',
     isMentor: 'all'
   });
@@ -160,16 +187,6 @@ const AlumniNetwork = () => {
     { value: '1991-2000', label: '1991-2000' },
     { value: '2001-2010', label: '2001-2010' },
     { value: '2011-2020', label: '2011-2020' }
-  ];
-
-  const departmentOptions = [
-    { value: 'all', label: 'All Departments' },
-    { value: 'Computer Science', label: 'Computer Science' },
-    { value: 'Physics', label: 'Physics' },
-    { value: 'Business Administration', label: 'Business Administration' },
-    { value: 'Medicine', label: 'Medicine' },
-    { value: 'Fine Arts', label: 'Fine Arts' },
-    { value: 'Chemistry', label: 'Chemistry' }
   ];
 
   const chapterOptions = [
@@ -217,9 +234,9 @@ const AlumniNetwork = () => {
       const searchTerm = filters.search.toLowerCase();
       filtered = filtered.filter(alum =>
         alum.name.toLowerCase().includes(searchTerm) ||
-        alum.department.toLowerCase().includes(searchTerm) ||
-        alum.currentRole.toLowerCase().includes(searchTerm) ||
-        alum.location.toLowerCase().includes(searchTerm)
+        alum.location.toLowerCase().includes(searchTerm) ||
+        alum.usn.toLowerCase().includes(searchTerm) ||
+        alum.degree.toLowerCase().includes(searchTerm)
       );
     }
 
@@ -230,11 +247,6 @@ const AlumniNetwork = () => {
         const [start, end] = filters.batch.split('-').map(Number);
         return batchYear >= start && batchYear <= end;
       });
-    }
-
-    // Department filter
-    if (filters.department !== 'all') {
-      filtered = filtered.filter(alum => alum.department === filters.department);
     }
 
     // Chapter filter
@@ -259,13 +271,29 @@ const AlumniNetwork = () => {
     }));
   };
 
-  const handleConnect = (alumniId) => {
-    // In real app, this would open a connection request modal
-    console.log('Connect with alumni:', alumniId);
-    alert('Connection request feature coming soon!');
+  const handleConnect = (alumniId, event = null) => {
+    if (event) {
+      event.stopPropagation();
+    }
+    
+    // Add to connected users set
+    setConnectedUsers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(alumniId)) {
+        newSet.delete(alumniId);
+        alert('Connection removed successfully!');
+      } else {
+        newSet.add(alumniId);
+        alert('Connection request sent successfully!');
+      }
+      return newSet;
+    });
   };
 
-  const handleRequestMentorship = (mentorId) => {
+  const handleRequestMentorship = (mentorId, event = null) => {
+    if (event) {
+      event.stopPropagation();
+    }
     // In real app, this would open a mentorship request form
     console.log('Request mentorship:', mentorId);
     alert('Mentorship request feature coming soon!');
@@ -275,6 +303,60 @@ const AlumniNetwork = () => {
     // In real app, this would open a chapter joining form
     console.log('Join chapter:', chapterId);
     alert('Chapter joining feature coming soon!');
+  };
+
+  // Format phone number based on visibility
+  const formatPhoneNumber = (phone, visibility) => {
+    if (visibility === 'private') {
+      return '******' + phone.slice(-4);
+    }
+    return phone;
+  };
+
+  // Toggle address expansion
+  const toggleAddress = (alumniId, event = null) => {
+    if (event) {
+      event.stopPropagation();
+    }
+    
+    setExpandedAddresses(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(alumniId)) {
+        newSet.delete(alumniId);
+      } else {
+        newSet.add(alumniId);
+      }
+      return newSet;
+    });
+  };
+
+  // Format address with line breaks and view more functionality
+  const formatAddress = (address, alumniId) => {
+    const isExpanded = expandedAddresses.has(alumniId);
+    const addressLines = address.split(', ');
+    
+    if (addressLines.length <= 2 || isExpanded) {
+      return address;
+    }
+    
+    return addressLines.slice(0, 2).join(', ');
+  };
+
+  // Handle card click to show popup
+  const handleCardClick = (alum) => {
+    setSelectedAlumni(alum);
+    setShowPopup(true);
+  };
+
+  // Handle popup close
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setSelectedAlumni(null);
+  };
+
+  // Prevent popup close when clicking inside popup content
+  const handlePopupClick = (event) => {
+    event.stopPropagation();
   };
 
   const tabs = [
@@ -317,7 +399,7 @@ const AlumniNetwork = () => {
               <input
                 type="text"
                 className="an-search-input"
-                placeholder="Search alumni by name, role, or location..."
+                placeholder="Search alumni by name, USN, degree, or location..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
               />
@@ -334,18 +416,6 @@ const AlumniNetwork = () => {
               onChange={(e) => handleFilterChange('batch', e.target.value)}
             >
               {batchOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-
-            <select 
-              className="an-filter-select"
-              value={filters.department}
-              onChange={(e) => handleFilterChange('department', e.target.value)}
-            >
-              {departmentOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -373,6 +443,7 @@ const AlumniNetwork = () => {
                 key={alum.id} 
                 className="an-alumni-card"
                 style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => handleCardClick(alum)}
               >
                 <div className="an-card-header">
                   <img 
@@ -385,8 +456,13 @@ const AlumniNetwork = () => {
                   />
                   <div className="an-profile-info">
                     <h3 className="an-profile-name">{alum.name}</h3>
+                    {/* UPDATED: USN below Batch */}
                     <div className="an-profile-meta">
-                      Batch {alum.batch} • {alum.department}
+                      <div className="an-profile-batch">Batch {alum.batch}</div>
+                      <div className="an-profile-usn">USN: {alum.usn}</div>
+                    </div>
+                    <div className="an-profile-degree">
+                      {alum.degree}
                     </div>
                     <div className="an-profile-location">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -398,28 +474,60 @@ const AlumniNetwork = () => {
                 </div>
 
                 <div className="an-card-body">
-                  <p className="an-profile-role">{alum.currentRole}</p>
-                  <div className="an-profile-skills">
-                    {alum.skills.map((skill, idx) => (
-                      <span key={idx} className="an-skill-tag">{skill}</span>
-                    ))}
+                  {/* Skills Section - Always visible */}
+                 
+                  
+                  {/* Contact Information - Hidden on mobile, shown in popup */}
+                  <div className="an-contact-info">
+                    <div className="an-contact-item">
+                      <span className="an-contact-label">Email:</span>
+                      <span className="an-contact-value">{alum.email}</span>
+                    </div>
+                    <div className="an-contact-item">
+                      <span className="an-contact-label">Phone:</span>
+                      <span className="an-contact-value">
+                        {formatPhoneNumber(alum.phone, alum.phoneVisibility)}
+                        {alum.phoneVisibility === 'private' && (
+                          <span className="an-private-badge">Private</span>
+                        )}
+                      </span>
+                    </div>
+                    <div className="an-contact-item an-address-item">
+                      <span className="an-contact-label">Address:</span>
+                      <div className="an-address-content">
+                        <span className="an-contact-value an-address">
+                          {formatAddress(alum.address, alum.id)}
+                        </span>
+                        {/* UPDATED: View More button on second line */}
+                        {alum.address.split(', ').length > 2 && (
+                          <button 
+                            className="an-view-more-btn"
+                            onClick={(e) => toggleAddress(alum.id, e)}
+                          >
+                            {expandedAddresses.has(alum.id) ? 'View Less' : 'View More'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div className="an-card-footer">
                   <button 
-                    className="an-connect-btn"
-                    onClick={() => handleConnect(alum.id)}
+                    className={`an-connect-btn ${connectedUsers.has(alum.id) ? 'connected' : ''}`}
+                    onClick={(e) => handleConnect(alum.id, e)}
                   >
-                    Connect
+                    {connectedUsers.has(alum.id) ? (
+                      <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                        Connected
+                      </>
+                    ) : (
+                      'Connect'
+                    )}
                   </button>
-                  <div className="an-social-links">
-                    <a href={alum.linkedin} className="an-social-link">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                      </svg>
-                    </a>
-                  </div>
                 </div>
               </div>
             ))}
@@ -501,19 +609,6 @@ const AlumniNetwork = () => {
     <div className="an-mentors-section">
       <div className="an-section-header">
         <h2 className="an-section-title">Alumni Mentors Directory</h2>
-        <div className="an-search-filters">
-          <select 
-            className="an-filter-select"
-            value={filters.department}
-            onChange={(e) => handleFilterChange('department', e.target.value)}
-          >
-            {departmentOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
       
       <div className="an-mentors-grid">
@@ -522,6 +617,7 @@ const AlumniNetwork = () => {
             key={mentor.id} 
             className="an-mentor-card"
             style={{ animationDelay: `${index * 0.1}s` }}
+            onClick={() => handleCardClick(mentor)}
           >
             <div className="an-mentor-content">
               <img 
@@ -533,15 +629,31 @@ const AlumniNetwork = () => {
                 }}
               />
               <h3 className="an-mentor-name">{mentor.name}</h3>
-              <div className="an-mentor-role">
-                {mentor.currentRole}
+              {/* UPDATED: USN below Batch for mentors too */}
+              <div className="an-profile-meta">
+                <div className="an-profile-batch">Batch {mentor.batch}</div>
+                <div className="an-profile-usn">USN: {mentor.usn}</div>
               </div>
-              <p className="an-mentor-expertise">
-                <strong>Expertise:</strong> {mentor.expertise}
-              </p>
+              <div className="an-mentor-degree">
+                {mentor.degree}
+              </div>
+              
+              {/* Mentor Contact Info - Hidden on mobile */}
+              <div className="an-mentor-contact">
+                <div className="an-contact-item">
+                  <span>Email: {mentor.email}</span>
+                </div>
+                <div className="an-contact-item">
+                  <span>Phone: {formatPhoneNumber(mentor.phone, mentor.phoneVisibility)}</span>
+                  {mentor.phoneVisibility === 'private' && (
+                    <span className="an-private-badge">Private</span>
+                  )}
+                </div>
+              </div>
+              
               <button 
                 className="an-mentor-btn"
-                onClick={() => handleRequestMentorship(mentor.id)}
+                onClick={(e) => handleRequestMentorship(mentor.id, e)}
               >
                 Request Mentorship
               </button>
@@ -551,6 +663,118 @@ const AlumniNetwork = () => {
       </div>
     </div>
   );
+
+  // Render Popup
+  const renderPopup = () => {
+    if (!showPopup || !selectedAlumni) return null;
+
+    return (
+      <div className="an-popup-overlay" onClick={handleClosePopup}>
+        <div className="an-popup-content" onClick={handlePopupClick}>
+          <button className="an-popup-close" onClick={handleClosePopup}>
+            ×
+          </button>
+          
+          <div className="an-popup-header">
+            <img 
+              src={selectedAlumni.image} 
+              alt={selectedAlumni.name}
+              className="an-popup-image"
+              onError={(e) => {
+                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedAlumni.name)}&background=667eea&color=fff&size=300`;
+              }}
+            />
+            <div className="an-popup-info">
+              <h3 className="an-popup-name">{selectedAlumni.name}</h3>
+              {/* UPDATED: USN below Batch in popup */}
+              <div className="an-popup-meta">
+                <div className="an-popup-batch">Batch {selectedAlumni.batch}</div>
+                <div className="an-popup-usn">USN: {selectedAlumni.usn}</div>
+              </div>
+              <div className="an-popup-degree">
+                {selectedAlumni.degree}
+              </div>
+              <div className="an-popup-location">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
+                </svg>
+                {selectedAlumni.location}
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Information - Always visible in popup */}
+          <div className="an-popup-contact">
+            <div className="an-popup-contact-item">
+              <span className="an-popup-contact-label">Email:</span>
+              <span className="an-popup-contact-value">{selectedAlumni.email}</span>
+            </div>
+            <div className="an-popup-contact-item">
+              <span className="an-popup-contact-label">Phone:</span>
+              <span className="an-popup-contact-value">
+                {formatPhoneNumber(selectedAlumni.phone, selectedAlumni.phoneVisibility)}
+                {selectedAlumni.phoneVisibility === 'private' && (
+                  <span className="an-private-badge">Private</span>
+                )}
+              </span>
+            </div>
+            <div className="an-popup-contact-item">
+              <span className="an-popup-contact-label">Address:</span>
+              <span className="an-popup-contact-value">{selectedAlumni.address}</span>
+            </div>
+            {/* {selectedAlumni.isMentor && (
+              <div className="an-popup-contact-item">
+                <span className="an-popup-contact-label">Expertise:</span>
+                <span className="an-popup-contact-value">{selectedAlumni.expertise}</span>
+              </div>
+            )} */}
+          </div>
+
+          {/* Skills Section */}
+          {selectedAlumni.skills && selectedAlumni.skills.length > 0 && (
+            <div className="an-popup-skills">
+              {/* <h4 className="an-popup-skills-title">Skills & Expertise</h4> */}
+              {/* <div className="an-popup-skills-list">
+                {selectedAlumni.skills.map((skill, idx) => (
+                  <span key={idx} className="an-popup-skill">
+                    {skill}
+                  </span>
+                ))}
+              </div> */}
+            </div>
+          )}
+
+          <div className="an-popup-footer">
+            <button 
+              className={`an-popup-connect-btn ${connectedUsers.has(selectedAlumni.id) ? 'connected' : ''}`}
+              onClick={(e) => handleConnect(selectedAlumni.id, e)}
+            >
+              {connectedUsers.has(selectedAlumni.id) ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  Connected
+                </>
+              ) : (
+                'Connect'
+              )}
+            </button>
+            
+            {selectedAlumni.isMentor && (
+              <button 
+                className="an-popup-connect-btn"
+                onClick={(e) => handleRequestMentorship(selectedAlumni.id, e)}
+                style={{background: 'linear-gradient(135deg, #667eea, #764ba2)'}}
+              >
+                Request Mentorship
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="an-page">
@@ -585,6 +809,9 @@ const AlumniNetwork = () => {
       <main className="an-main-content">
         {renderTabContent()}
       </main>
+
+      {/* Popup Modal */}
+      {renderPopup()}
     </div>
   );
 };
